@@ -1,5 +1,6 @@
 import os
 import base64
+import random
 from io import BytesIO
 from PIL import Image
 from flask import Flask, request, jsonify

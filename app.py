@@ -47,10 +47,20 @@ def predict():
             break
 
     if not inferred_category:
+        # If unable to infer category, encode the image and return it with the message
+        try:
+            image_data = Image.open(file.stream).convert("RGB")
+            buffered = BytesIO()
+            image_data.save(buffered, format="JPEG")
+            img_base64 = base64.b64encode(buffered.getvalue()).decode("utf-8")
+            image_url = f"data:image/jpeg;base64,{img_base64}"
+        except Exception as e:
+            return jsonify({"error": f"Image processing error: {str(e)}"}), 500
+
         return jsonify(
             {
-                "image": None,
-                "prediction": "Unable to infer tumor type from filename",
+                "image": image_url,  # Return the base64 image in the response
+                "prediction": "Unable to infer tumor type from file",
                 "confidence": 0.0,
             }
         )

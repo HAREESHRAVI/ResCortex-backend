@@ -1,5 +1,4 @@
 import os
-import random
 import base64
 from io import BytesIO
 from PIL import Image
@@ -46,9 +45,8 @@ def predict():
             inferred_category = label
             break
 
-    # Fallback to random category if keyword not found
     if not inferred_category:
-        inferred_category = random.choice(list(keywords_to_labels.values()))
+        return jsonify({"error": "Unable to infer tumor type from image filename"}), 400
 
     assigned_group = category_alias[inferred_category]
     confidence = round(random.uniform(0.87, 0.99), 2)

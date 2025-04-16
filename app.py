@@ -46,7 +46,13 @@ def predict():
             break
 
     if not inferred_category:
-        return jsonify({"error": "Unable to infer tumor type from image filename"}), 400
+        return jsonify(
+            {
+                "image": None,
+                "prediction": "Unable to infer tumor type from filename",
+                "confidence": 0.0,
+            }
+        )
 
     assigned_group = category_alias[inferred_category]
     confidence = round(random.uniform(0.87, 0.99), 2)
